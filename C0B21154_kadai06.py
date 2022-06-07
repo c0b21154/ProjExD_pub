@@ -1,8 +1,6 @@
 import pygame as py
 import sys
 from pygame.locals import *
-import tkinter as tk
-import os
 from random import randint, randrange
 import time
 
