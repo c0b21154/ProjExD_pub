@@ -39,7 +39,6 @@ class BG:
     # 四角形を描画（チカチカさせる）
     [py.draw.rect(self.surf, self.color[i], (self.x[i], self.y[i], self.side[i], self.side[i])) if i % 5 else py.draw.rect(self.surf, (randrange(255), randrange(255), randrange(255)),(self.x[i], self.y[i], self.side[i], self.side[i])) for i in range(self.max_obj)]
 
-
 class Snake:
   # snakeの色
   COLOR = [0, 170, 0]
@@ -101,7 +100,6 @@ class Snake:
       self.y += self.vel
       self.get_snake()
 
-
 class Effect:
   # 破片の大きさ
   RANGE = 30
@@ -140,7 +138,6 @@ class Effect:
     # 破片を黒にして見えなくする
     self.color -= 3
 
-
 class Enemy:
   COLOR=(139,0,0)
   SIDE=20
@@ -173,7 +170,6 @@ class Enemy:
     if set(range(snake_x, snake_x + snake_side + 1)) & self.set_x and set(range(snake_y, snake_y + snake_side + 1)) & self.set_y:
       return True
     return False
-
 
 class Food:
   # RGBで色を設定
@@ -209,7 +205,6 @@ class Food:
     if set(range(snake_x, snake_x + snake_side + 1)) & self.set_x and set(range(snake_y, snake_y + snake_side + 1)) & self.set_y:
       return True
     return False
-
     
 class Game:
   SIZE = WIDTH, HEIGHT = (1000,600)
