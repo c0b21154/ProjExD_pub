@@ -352,7 +352,7 @@ class Game:
       self.surf.blit(self.font_button.render("RETRY", 1, self.BLACK), (self.WIDTH // 2 - 33, self.HEIGHT // 2 - 40))
       self.clock.tick(self.fps)
       py.display.update()
-
+# it is better to show thw score as long as the player is playing to keep the player know about his score 
       # 終了コマンド
       for event in py.event.get():
         if event.type == QUIT:
