@@ -1,4 +1,5 @@
 import sys
+from pygame.locals import *
 from random import randint, randrange
 import time
 import pygame as py
@@ -361,6 +362,154 @@ class Game:
 
         Game()
 
+
+  SIZE = WIDTH, HEIGHT = (1000,600)
+  WHITE = (255, 255, 255)
+  BLACK = (0, 0, 0)
+  RED = (255, 0, 0)
+  GREEN = (0, 255, 0)
+  fps = 20
+  score = 0
+
+  def __init__(self): 
+    py.init()
+    py.display.set_caption("Snake Game")    
+    # 画像を描写するために使用するSurfaceクラスからインスタンスを生成
+    self.surf = py.display.set_mode(self.SIZE)
+    # 時間の設定
+    self.clock = py.time.Clock()
+    # 背景のインスタンスを生成
+    self.bg = BG(self.surf)
+    # effectのインスタンスを生成
+    self.effect = Effect(self.surf)
+    # effectのトリガー変数
+    self.effect_trigger = False
+    # snakeのインスタンスを生成
+    self.snake = Snake(self.surf)
+    # foodのインスタンスを生成
+    self.food = Food(self.surf)
+    # enemyのインスタンスを作成
+    self.enemy =Enemy(self.surf)
+    # スコア表示のフォント
+    self.font_score = py.font.Font(None, 22)
+    # 終了表示のフォント
+    self.font_end = py.font.Font(None, 48)
+    # ボタンのフォント
+    self.font_button = py.font.Font(None, 30)   
+    # play関数を実行
+    self.play()
+
+  def play(self):
+    """
+    キー操作
+    enemyに当たったときの処理
+    foodを食べた時の処理
+    ゲームオーバー判定
+    """
+    while True:
+      # 終了コマンドを設定
+      for event in py.event.get():
+            if event.type == py.QUIT: return
+      keys = py.key.get_pressed()
+      # 左を押した
+      if keys[K_LEFT]:
+        if self.snake.direction != "r":
+          self.snake.direction = "l"
+      # 右を押した
+      elif keys[K_RIGHT]:
+        if self.snake.direction != "l":
+          self.snake.direction = "r"
+      # 上を押した
+      elif keys[K_UP]:
+        if self.snake.direction != "d":
+          self.snake.direction = "u"
+      # 下を押した
+      elif keys[K_DOWN]:
+        if self.snake.direction != "u":
+          self.snake.direction = "d"
+
+      # foodがsnakeに食べられた
+      if self.food.is_eaten(self.snake.x, self.snake.y, self.snake.SIDE):       
+        # snakeの長さが伸びる
+        self.snake.add_lenght()
+        # effectのトリガーがTrue
+        self.effect_trigger = True
+        # 新しいfoodを配置
+        self.food.new_foodxy(self.snake.SIDE)
+        #新しいenemyの追加
+        self.enemy.new_enemyxy(self.snake.SIDE)
+        # スコアを加算
+        self.score += 1
+        # fpsの増加
+        self.fps += 1
+
+      if  self.enemy.is_attacked(self.snake.x, self.snake.y, self.snake.SIDE):
+        #新しいfoodの追加
+        self.food.new_foodxy(self.snake.SIDE)
+        #新しいenemyの追加
+        self.enemy.new_enemyxy(self.snake.SIDE)
+        #スコアの減少
+        self.score -= 1
+        #fpsの減少
+        self.fps -= 1
+        #enemyに当たったことが分かるように遅延させる
+        time.sleep(0.2)
+      # snakeが画面外に出たらゲームオーバー
+      if(self.snake.x < 0 or self.snake.y < 0 or self.snake.x + self.snake.SIDE > self.WIDTH or self.snake.y + self.snake.SIDE > self.HEIGHT) or len(self.snake.XY) != len(set(self.snake.XY)):
+        self.game_over()
+      self.draw()
+
+  def draw(self):
+    self.surf.fill(self.BLACK)
+    # スコア表示
+    self.surf.blit(self.font_score.render(f'SCORE:{self.score}', 1 , (255, 165, 0)), (self.WIDTH -1000, 10)) #c0b21084 白窪凜太郎
+
+    # 背景を描画
+    self.bg.draw(self.snake.direction)
+    # foodを描画
+    self.food.add_food()
+    # enemyを描画
+    self.enemy.add_enemy()
+    # snakeの移動を描画
+    self.snake.move_snake(self.snake.direction)
+    # effectを実行
+    self.effect.run(self.effect_trigger, self.snake.x, self.snake.y)
+    # effectトリガーをFalse
+    self.effect_trigger = False    
+    py.display.update()
+    # fpsを更新
+    self.clock.tick(self.fps)
+
+  def game_over(self):
+    while True:
+      # スコアの結果を表示
+      self.surf.blit(self.font_end.render(f'YOUR SCORE:{self.score}', 1, (255, 165, 0)), (self.WIDTH // 2 -130, self.HEIGHT // 3))
+      # mouseのポインタ位置
+      mouse_coord = py.mouse.get_pos()
+      # mouseのクリックイベント
+      mouse_events = py.mouse.get_pressed()
+      # RETRYボタンにマウスホバーすると色が変わる
+      if self.WIDTH // 2 - 50 < mouse_coord[0] < self.WIDTH // 2 + 50 and \
+        self.HEIGHT // 2 - 50 < mouse_coord[1] < self.HEIGHT // 2 -10:
+        # 緑の長方形を描画
+        py.draw.rect(self.surf, self.GREEN, (self.WIDTH // 2 - 50, self.HEIGHT // 2 - 50, 100,40))
+        if mouse_events[0]:
+          # RETRYボタン領域をクリック
+          break
+      else:
+        # 赤の長方形を描画
+        py.draw.rect(self.surf, self.RED, (self.WIDTH // 2 -50, self.HEIGHT // 2 - 50, 100, 40))
+      # RETRYの文字表示
+      self.surf.blit(self.font_button.render("RETRY", 1, self.BLACK), (self.WIDTH // 2 - 33, self.HEIGHT // 2 - 40))
+      self.clock.tick(self.fps)
+      py.display.update()
+
+      # 終了コマンド
+      for event in py.event.get():
+        if event.type == QUIT:
+          py.quit()
+          sys.exit()
+    Game()
 
 if __name__ == "__main__":
     Game()
