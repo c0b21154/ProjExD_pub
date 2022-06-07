@@ -299,7 +299,7 @@ class Game:
             if(self.snake.x < 0 or self.snake.y < 0 or self.snake.x + self.snake.SIDE > self.WIDTH or self.snake.y + self.snake.SIDE > self.HEIGHT) or len(self.snake.xy) != len(set(self.snake.xy)):
                 self.game_over()
             self.draw()
-
+  
     def draw(self):
         self.surf.fill(self.BLACK)
         # スコア表示
