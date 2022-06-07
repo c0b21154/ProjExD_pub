@@ -1,8 +1,8 @@
 import pygame as py
 import sys
 from pygame.locals import *
-import tkinter as tk
-import os
+import tkinter as tk  #いらない
+import os             #いらない
 from random import randint, randrange
 import time
 
@@ -258,6 +258,8 @@ class Game:
     ゲームオーバー判定
     """
     while True:
+      self.surf.blit(self.font_score.render(f'SCORE:{self.score}', 1 , (255, 165, 0)), (self.WIDTH - -90, 5))
+      py.display.update()
       # 終了コマンドを設定
       for event in py.event.get():
             if event.type == py.QUIT: return
