@@ -46,7 +46,7 @@ class Snake:
     # snakeの長辺の長さ
     SIDE = 15
     # snakeの長さ
-    lenght = 2
+    length = 2
     # snakeの移動速度（velocity）
     vel = 10
 
@@ -62,9 +62,9 @@ class Snake:
         # 移動方向、l=左、r=右、d=下、u=上
         self.direction = "d"
 
-    def add_lenght(self):
+    def add_length(self):
         # 1長くする
-        self.lenght += 1
+        self.length += 1
         # 長辺の長さを1長くする
         self.SIDE += 1
         # RGBのGを濃くする
@@ -74,7 +74,7 @@ class Snake:
 
     def get_snake(self):
         self.xy += [(self.x, self.y)]
-        self.xy = self.xy[-self.lenght:]
+        self.xy = self.xy[-self.length:]
         # snakeの体をブロックごとに描画
         for kx, ky in self.xy:
             py.draw.rect(self.surface, self.COLOR, (kx, ky, self.SIDE, self.SIDE))
@@ -275,7 +275,7 @@ class Game:
             # foodがsnakeに食べられた
             if self.food.is_eaten(self.snake.x, self.snake.y, self.snake.SIDE):
                 # snakeの長さが伸びる
-                self.snake.add_lenght()
+                self.snake.add_length()
                 # effectのトリガーがTrue
                 self.effect_trigger = True
                 # 新しいfoodを配置
