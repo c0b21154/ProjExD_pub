@@ -313,7 +313,8 @@ class Game:
   def draw(self):
     self.surf.fill(self.BLACK)
     # スコア表示
-    self.surf.blit(self.font_score.render(f'SCORE:{self.score}', 1 , (255, 165, 0)), (self.WIDTH -1000, 10)) #c0b21084 白窪凜太郎
+    self.surf.blit(self.font_score.render(f'SCORE:{self.score}', 1 , (255, 165, 0)), (self.WIDTH -1000, 10)) 
+    #c0b21084 白窪凜太郎
 
     # 背景を描画
     self.bg.draw(self.snake.direction)
