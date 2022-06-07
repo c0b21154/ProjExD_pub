@@ -84,22 +84,19 @@ class Snake:
         if key == "l":
             # 左方向へ速度を加算
             self.x -= self.vel
-            self.get_snake()
         # 右へ操作
         if key == "r":
             # 右方向へ速度を加算
             self.x += self.vel
-            self.get_snake()
         # 下へ操作
         if key == "u":
             # 下方向へ速度を加算
             self.y -= self.vel
-            self.get_snake()
         # 上へ操作
         if key == "d":
             # 上方向へ速度を加算
             self.y += self.vel
-            self.get_snake()
+        self.get_snake()
 
 class Effect:
     # 破片の大きさ
